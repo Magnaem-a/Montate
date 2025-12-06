@@ -168,32 +168,48 @@ const protect=()=>{
       });
     }
   });
-  document.querySelectorAll('.flatpickr-current-month .numInputWrapper input.cur-year, .cur-year, input.cur-year').forEach(yearInput=>{
+  document.querySelectorAll('.flatpickr-current-month .numInputWrapper input.cur-year, .cur-year, input.cur-year, .numInput.cur-year').forEach(yearInput=>{
     if(!yearInput.classList.contains('notranslate')){
       yearInput.classList.add('notranslate');
       yearInput.setAttribute('translate','no');
       if(yearInput.style) {
-        yearInput.style.display='inline-block';
-        yearInput.style.visibility='visible';
-        yearInput.style.opacity='1';
-        yearInput.style.width='auto';
-        yearInput.style.minWidth='60px';
-        yearInput.style.color='#111';
+        yearInput.style.setProperty('display','inline-block','important');
+        yearInput.style.setProperty('visibility','visible','important');
+        yearInput.style.setProperty('opacity','1','important');
+        yearInput.style.setProperty('width','auto','important');
+        yearInput.style.setProperty('min-width','70px','important');
+        yearInput.style.setProperty('color','#111','important');
+        yearInput.style.setProperty('-webkit-text-fill-color','#111','important');
+        yearInput.style.setProperty('pointer-events','auto','important');
+        yearInput.style.setProperty('cursor','text','important');
+        yearInput.removeAttribute('disabled');
+        yearInput.removeAttribute('readonly');
       }
     }
-    if(!yearInput.value||yearInput.value===''){
+    if(!yearInput.value||yearInput.value===''||yearInput.value==='0'){
       const currentYear=new Date().getFullYear();
       yearInput.value=currentYear;
       yearInput.setAttribute('value',currentYear);
+      yearInput.dispatchEvent(new Event('input',{bubbles:true}));
+      yearInput.dispatchEvent(new Event('change',{bubbles:true}));
     }
     const parent=yearInput.closest('.numInputWrapper');
     if(parent&&!parent.classList.contains('notranslate')){
       parent.classList.add('notranslate');
       parent.setAttribute('translate','no');
       if(parent.style) {
-        parent.style.display='inline-block';
-        parent.style.visibility='visible';
+        parent.style.setProperty('display','inline-block','important');
+        parent.style.setProperty('visibility','visible','important');
+        parent.style.setProperty('opacity','1','important');
+        parent.style.setProperty('pointer-events','auto','important');
       }
+      const arrows=parent.querySelectorAll('.arrowUp,.arrowDown');
+      arrows.forEach(arrow=>{
+        arrow.style.setProperty('display','block','important');
+        arrow.style.setProperty('visibility','visible','important');
+        arrow.style.setProperty('pointer-events','auto','important');
+        arrow.style.setProperty('cursor','pointer','important');
+      });
     }
   });
   document.querySelectorAll('[data-ms-member]').forEach(el=>{
