@@ -302,7 +302,51 @@ document.addEventListener("DOMContentLoaded", function () {
   if (endDateInstance) {
     protectFlatpickrFromTranslation(endDateInstance);
   }
-  
+
+  // Function to ensure year input is visible and has value
+  function ensureYearVisible(instance) {
+    if (!instance || !instance.calendarContainer) return;
+    
+    const yearInputs = instance.calendarContainer.querySelectorAll('.cur-year, .numInput.cur-year, input.cur-year, .numInputWrapper input.cur-year');
+    yearInputs.forEach(yearInput => {
+      if (!yearInput) return;
+      
+      // Set value if empty
+      if (!yearInput.value || yearInput.value === '' || yearInput.value === '0') {
+        const currentYear = new Date().getFullYear();
+        yearInput.value = currentYear;
+        yearInput.setAttribute('value', currentYear);
+        // Trigger input event to update Flatpickr
+        yearInput.dispatchEvent(new Event('input', { bubbles: true }));
+        yearInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      
+      // Force visibility
+      yearInput.style.setProperty('display', 'inline-block', 'important');
+      yearInput.style.setProperty('visibility', 'visible', 'important');
+      yearInput.style.setProperty('opacity', '1', 'important');
+      yearInput.style.setProperty('width', 'auto', 'important');
+      yearInput.style.setProperty('min-width', '60px', 'important');
+      yearInput.style.setProperty('color', '#111', 'important');
+      yearInput.style.setProperty('-webkit-text-fill-color', '#111', 'important');
+      yearInput.style.setProperty('background', 'transparent', 'important');
+      yearInput.style.setProperty('border', 'none', 'important');
+      
+      // Protect from translation
+      yearInput.classList.add('notranslate');
+      yearInput.setAttribute('translate', 'no');
+      
+      // Ensure parent wrapper is visible
+      const wrapper = yearInput.closest('.numInputWrapper');
+      if (wrapper) {
+        wrapper.style.setProperty('display', 'inline-block', 'important');
+        wrapper.style.setProperty('visibility', 'visible', 'important');
+        wrapper.classList.add('notranslate');
+        wrapper.setAttribute('translate', 'no');
+      }
+    });
+  }
+
   // Function to protect Flatpickr calendar elements from Google Translate
   function protectFlatpickrFromTranslation(instance) {
     if (!instance) return;
