@@ -1,0 +1,206 @@
+<!-- ==========================================================
+MONTATE – HOME PAGE HEAD SETUP (ICONS + FLATPICKR + A2HS CSS)
+Version: 1.0 | Nov 2025 | Author: Magnaem Ambata
+--------------------------------------------------------------
+PURPOSE:
+• Loads Flatpickr styles globally
+• Injects iOS/Android PWA meta tags
+• Adds light A2HS banner styling overrides
+=========================================================== -->
+
+<!-- Flatpickr Stylesheet (required for date pickers) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<style>
+/* ▸ GLOBAL FONT */
+.flatpickr-calendar,
+.flatpickr-days,
+.flatpickr-day,
+.flatpickr-months,
+.flatpickr-weekday {
+  font-family: "Inter", sans-serif !important;
+}
+
+/* ▸ CALENDAR BACKGROUND + BORDER */
+.flatpickr-calendar {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb; /* light gray */
+  border-radius: 12px !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  padding: 12px 12px 12px !important;  /* top / sides / bottom */
+  box-sizing: content-box !important;
+  
+}
+
+/* ▸ MONTH NAVIGATION ARROWS */
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  color: #222 !important;
+  fill: #222 !important;
+  top: calc(8px + 2px) !important; /* padding-top + extra offset */
+}
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+  fill: #111 !important;
+}
+.flatpickr-prev-month svg path,
+.flatpickr-next-month svg path {
+  stroke-width: 1 !important;    /* default is 2 */
+  stroke: #222 !important;       /* ensure your color applies */
+  fill: #222 !important;         /* ensures stroke is visible */
+}
+/* Move left arrow */
+.flatpickr-prev-month {
+  left: 10px !important;   /* adjust to your design */
+}
+
+/* Move right arrow */
+.flatpickr-next-month {
+  right: 10px !important;  /* adjust to your design */
+}
+
+/* ▸ WEEKDAY LABELS */
+.flatpickr-weekday {
+  color: #56565F !important;
+  font-weight: 300;
+  margin-top: 10px !important; 
+}
+
+/* ▸ DAY CELLS */
+.flatpickr-day {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* ▸ HOVER STATE */
+.flatpickr-day:hover {
+  background: #F1F2F3 !important;
+  color: #111 !important;
+}
+
+/* ▸ SELECTED DATE */
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #111 !important; /* your brand colour */
+  color: #fff !important;
+  border-color: #111 !important;
+}
+
+/* ▸ DISABLED DATES */
+.flatpickr-day.disabled,
+.flatpickr-day.notAllowed {
+  color: #cbd5e1 !important;
+}
+
+/* Month + Year container */
+.flatpickr-current-month {
+  font-family: "Inter", sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #111 !important;
+}
+
+/* Month text */
+.flatpickr-current-month .cur-month {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  padding-right: 18px; /* space after the little arrow */
+}
+
+/* Month text when using dropdown */
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Optional: style the options in the dropdown */
+.flatpickr-current-month .flatpickr-monthDropdown-months option {
+  font-family: "Inter", sans-serif !important;
+}
+
+.flatpickr-current-month .numInputWrapper input.cur-year {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: auto !important;
+  min-width: 50px !important;
+}
+
+.flatpickr-current-month .numInputWrapper {
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+.flatpickr-current-month .numInputWrapper * {
+  display: inline-block !important;
+  visibility: visible !important;
+}
+
+/* ▸ PLACEHOLDER STYLING FOR FLATPICKR INPUTS (Mobile Fix + Anti-Flicker) */
+.flatpickr-input::placeholder,
+input.flatpickr-input::placeholder,
+#start-date.flatpickr-input::placeholder,
+#end-date.flatpickr-input::placeholder,
+#start-date::placeholder,
+#end-date::placeholder {
+  color: #111 !important;
+  opacity: 1 !important;
+  transition: opacity 0s !important; /* Prevent flicker */
+}
+
+/* Prevent placeholder from disappearing on focus when empty */
+.flatpickr-input:not(:focus):placeholder-shown,
+#start-date:not(:focus):placeholder-shown,
+#end-date:not(:focus):placeholder-shown {
+  color: #111 !important;
+}
+
+/* Mobile-specific placeholder fix */
+@media (max-width: 768px) {
+  .flatpickr-input::placeholder,
+  input.flatpickr-input::placeholder,
+  #start-date.flatpickr-input::placeholder,
+  #end-date.flatpickr-input::placeholder,
+  #start-date::placeholder,
+  #end-date::placeholder {
+    color: #111 !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #111 !important;
+    transition: opacity 0s !important; /* Prevent flicker */
+  }
+  
+  .flatpickr-input:not(:focus):placeholder-shown,
+  #start-date:not(:focus):placeholder-shown,
+  #end-date:not(:focus):placeholder-shown {
+    color: #111 !important;
+    -webkit-text-fill-color: #111 !important;
+  }
+}
+</style>
+
+<!-- Minor A2HS banner UI overrides -->
+<style>
+  #montate-a2hs strong { color:#000; }
+  #montate-a2hs button:hover { background:#d6ff2b; }
+</style>
+
+<!-- PWA / iOS Web App Meta Setup -->
+<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.prod.website-files.com/68cec10c0ce8479be5cf0065/69047714421aa78bd682be5e_montate-logo-mark-black-lime-rgb%201.png">
+<meta name="apple-mobile-web-app-title" content="Montate">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Android Theme Color -->
+<meta name="theme-color" content="#C6FF00">
