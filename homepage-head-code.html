@@ -178,20 +178,38 @@ input.cur-year {
   pointer-events: auto !important;
   margin-left: 0 !important;
   vertical-align: middle !important;
+  position: relative !important;
+  width: auto !important;
 }
 
 .flatpickr-current-month .numInputWrapper .arrowUp,
 .flatpickr-current-month .numInputWrapper .arrowDown {
+  position: absolute !important;
+  right: 2px !important;
+  width: 16px !important;
+  height: 12px !important;
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
   cursor: pointer !important;
+  z-index: 10 !important;
+  background: transparent !important;
+  border: none !important;
 }
 
-.flatpickr-current-month .numInputWrapper * {
-  display: inline-block !important;
-  visibility: visible !important;
+.flatpickr-current-month .numInputWrapper .arrowUp {
+  top: 2px !important;
+}
+
+.flatpickr-current-month .numInputWrapper .arrowDown {
+  bottom: 2px !important;
+}
+
+.flatpickr-current-month .numInputWrapper input.cur-year {
+  padding-right: 20px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 /* ▸ PLACEHOLDER STYLING FOR FLATPICKR INPUTS (Mobile Fix + Anti-Flicker) */
