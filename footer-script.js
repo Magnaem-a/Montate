@@ -168,23 +168,31 @@ const protect=()=>{
       });
     }
   });
-  document.querySelectorAll('.flatpickr-current-month .numInputWrapper input.cur-year').forEach(yearInput=>{
+  document.querySelectorAll('.flatpickr-current-month .numInputWrapper input.cur-year, .cur-year, input.cur-year').forEach(yearInput=>{
     if(!yearInput.classList.contains('notranslate')){
       yearInput.classList.add('notranslate');
       yearInput.setAttribute('translate','no');
       if(yearInput.style) {
-        yearInput.style.display='';
-        yearInput.style.visibility='';
-        yearInput.style.opacity='';
+        yearInput.style.display='inline-block';
+        yearInput.style.visibility='visible';
+        yearInput.style.opacity='1';
+        yearInput.style.width='auto';
+        yearInput.style.minWidth='60px';
+        yearInput.style.color='#111';
       }
+    }
+    if(!yearInput.value||yearInput.value===''){
+      const currentYear=new Date().getFullYear();
+      yearInput.value=currentYear;
+      yearInput.setAttribute('value',currentYear);
     }
     const parent=yearInput.closest('.numInputWrapper');
     if(parent&&!parent.classList.contains('notranslate')){
       parent.classList.add('notranslate');
       parent.setAttribute('translate','no');
       if(parent.style) {
-        parent.style.display='';
-        parent.style.visibility='';
+        parent.style.display='inline-block';
+        parent.style.visibility='visible';
       }
     }
   });

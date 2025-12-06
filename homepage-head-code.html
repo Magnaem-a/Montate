@@ -126,16 +126,30 @@ PURPOSE:
   font-family: "Inter", sans-serif !important;
 }
 
-.flatpickr-current-month .numInputWrapper input.cur-year {
+.flatpickr-current-month .numInputWrapper input.cur-year,
+.flatpickr-current-month input.cur-year,
+.cur-year,
+.numInput.cur-year {
   font-size: inherit !important;
   font-weight: inherit !important;
-  color: inherit !important;
+  color: #111 !important;
   font-family: inherit !important;
   display: inline-block !important;
   visibility: visible !important;
   opacity: 1 !important;
   width: auto !important;
-  min-width: 50px !important;
+  min-width: 60px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 4px !important;
+  text-align: center !important;
+  -webkit-text-fill-color: #111 !important;
+}
+
+.flatpickr-current-month .numInputWrapper input.cur-year:focus,
+.flatpickr-current-month input.cur-year:focus {
+  outline: none !important;
+  border: none !important;
 }
 
 .flatpickr-current-month .numInputWrapper {
