@@ -321,24 +321,12 @@ document.addEventListener("DOMContentLoaded", function () {
           // Also set on font tags that Google Translate adds
           if (el.tagName === 'FONT') {
             el.setAttribute('translate', 'no');
+            el.style.setProperty('display', '', 'important');
           }
         });
         
-        // Ensure year input has a value and is visible
-        const yearInputs = calendar.querySelectorAll('.cur-year, .numInput.cur-year, input.cur-year');
-        yearInputs.forEach(yearInput => {
-          if (yearInput && (!yearInput.value || yearInput.value === '')) {
-            const currentYear = new Date().getFullYear();
-            yearInput.value = currentYear;
-            yearInput.setAttribute('value', currentYear);
-            // Force display
-            yearInput.style.display = 'inline-block';
-            yearInput.style.visibility = 'visible';
-            yearInput.style.opacity = '1';
-            yearInput.style.width = 'auto';
-            yearInput.style.minWidth = '50px';
-          }
-        });
+        // Ensure year is visible using dedicated function
+        ensureYearVisible(instance);
       }
     };
     
