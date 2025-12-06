@@ -155,17 +155,28 @@ const applyCustomWordTranslations=lang=>{
     }
   });
 };
+const isMobile=()=>/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||window.innerWidth<=768;
 const protect=()=>{
-  document.querySelectorAll('.flatpickr-calendar, .flatpickr-weekday, .flatpickr-day, .flatpickr-month, .flatpickr-current-month').forEach(el=>{
+  document.querySelectorAll('.flatpickr-calendar, .flatpickr-weekday, .flatpickr-day, .flatpickr-month, .flatpickr-current-month, .flatpickr-time, .flatpickr-time input, .flatpickr-am-pm').forEach(el=>{
     if(!el.classList.contains('notranslate')){
       el.classList.add('notranslate');
       el.setAttribute('translate','no');
-      el.querySelectorAll('font').forEach(font=>{
-        font.classList.add('notranslate');
-        font.setAttribute('translate','no');
+      el.querySelectorAll('font, span, div, input').forEach(child=>{
+        child.classList.add('notranslate');
+        child.setAttribute('translate','no');
       });
     }
   });
+  const startInput=document.getElementById('start-date');
+  const endInput=document.getElementById('end-date');
+  if(startInput&&!startInput.classList.contains('notranslate')){
+    startInput.classList.add('notranslate');
+    startInput.setAttribute('translate','no');
+  }
+  if(endInput&&!endInput.classList.contains('notranslate')){
+    endInput.classList.add('notranslate');
+    endInput.setAttribute('translate','no');
+  }
   document.querySelectorAll('[data-ms-member]').forEach(el=>{
     if(el.getAttribute('data-ms-code')==='translate'||el.classList.contains('notranslate')) return;
     const computed=getComputedStyle(el);
@@ -292,6 +303,13 @@ async function applyLang(code){
     if(target!=='en') restoreTranslationCase();
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
     if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
+    if(isMobile()){
+      setTimeout(()=>{
+        protect();
+        if(window.updateDatePlaceholders) window.updateDatePlaceholders();
+        if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
+      },200);
+    }
     setTimeout(()=>{
       const currentLang=getCookie('googtrans')?.split('/').pop()||'en';
       const comboValue=combo?.value||'';
@@ -363,22 +381,46 @@ const init=()=>{
         if(v!=='en') restoreTranslationCase(); 
         if(window.updateDatePlaceholders) window.updateDatePlaceholders();
         if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
-      },100);
+        if(isMobile()){
+          setTimeout(()=>{
+            protect();
+            if(window.updateDatePlaceholders) window.updateDatePlaceholders();
+            if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
+          },300);
+        }
+      },isMobile()?50:100);
     });
     c._msBound=true;
   });
+  const mobileUpdateInterval=isMobile()?500:1000;
   new MutationObserver(()=>{
     protect();
     const lang=getCookie('googtrans')?.split('/').pop()||'en';
     if(lang!=='en') restoreTranslationCase();
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
+    if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
   }).observe(document.body,{childList:true,subtree:true,characterData:true});
   setInterval(()=>{
     protect();
     const lang=getCookie('googtrans')?.split('/').pop()||'en';
     if(lang!=='en') restoreTranslationCase();
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
-  },1000);
+    if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
+  },mobileUpdateInterval);
+  if(isMobile()){
+    const mobileInputs=document.querySelectorAll('#start-date, #end-date');
+    mobileInputs.forEach(input=>{
+      ['focus','blur','touchstart','touchend'].forEach(eventType=>{
+        input.addEventListener(eventType,()=>{
+          setTimeout(()=>{
+            protect();
+            if(window.updateDatePlaceholders) window.updateDatePlaceholders();
+            if(window.updateFlatpickrLocale) window.updateFlatpickrLocale();
+          },100);
+        },{passive:true});
+      });
+    });
+  }
 };
 if(document.readyState==='complete'||document.readyState==='interactive') init();
 else document.addEventListener('DOMContentLoaded',init);
