@@ -100,6 +100,10 @@ PURPOSE:
   font-size: 18px !important;
   font-weight: 600 !important;
   color: #111 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  justify-content: center !important;
 }
 
 /* Month text */
@@ -108,7 +112,8 @@ PURPOSE:
   font-size: inherit !important;
   font-weight: inherit !important;
   color: inherit !important;
-  padding-right: 18px; /* space after the little arrow */
+  padding-right: 0 !important;
+  margin-right: 8px !important;
 }
 
 /* Month text when using dropdown */
@@ -119,6 +124,8 @@ PURPOSE:
   color: inherit !important;
   background: transparent !important;
   border: none !important;
+  display: inline-block !important;
+  margin-right: 8px !important;
 }
 
 /* Optional: style the options in the dropdown */
@@ -169,6 +176,8 @@ input.cur-year {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+  margin-left: 0 !important;
+  vertical-align: middle !important;
 }
 
 .flatpickr-current-month .numInputWrapper .arrowUp,
