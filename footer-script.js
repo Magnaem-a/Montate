@@ -180,10 +180,12 @@ const protect=()=>{
         yearInput.style.setProperty('min-width','70px','important');
         yearInput.style.setProperty('color','#111','important');
         yearInput.style.setProperty('-webkit-text-fill-color','#111','important');
-        yearInput.style.setProperty('pointer-events','auto','important');
-        yearInput.style.setProperty('cursor','text','important');
-        yearInput.removeAttribute('disabled');
-        yearInput.removeAttribute('readonly');
+        yearInput.style.setProperty('pointer-events','none','important');
+        yearInput.style.setProperty('cursor','default','important');
+        yearInput.style.setProperty('user-select','none','important');
+        yearInput.style.setProperty('-webkit-user-select','none','important');
+        yearInput.setAttribute('readonly','readonly');
+        yearInput.setAttribute('tabindex','-1');
       }
     }
     if(!yearInput.value||yearInput.value===''||yearInput.value==='0'){

@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
         yearInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
       
-      // Force visibility and functionality
+      // Force visibility but make read-only (arrows only)
       yearInput.style.setProperty('display', 'inline-block', 'important');
       yearInput.style.setProperty('visibility', 'visible', 'important');
       yearInput.style.setProperty('opacity', '1', 'important');
@@ -331,10 +331,25 @@ document.addEventListener("DOMContentLoaded", function () {
       yearInput.style.setProperty('-webkit-text-fill-color', '#111', 'important');
       yearInput.style.setProperty('background', 'transparent', 'important');
       yearInput.style.setProperty('border', 'none', 'important');
-      yearInput.style.setProperty('pointer-events', 'auto', 'important');
-      yearInput.style.setProperty('cursor', 'text', 'important');
-      yearInput.removeAttribute('disabled');
-      yearInput.removeAttribute('readonly');
+      yearInput.style.setProperty('pointer-events', 'none', 'important');
+      yearInput.style.setProperty('cursor', 'default', 'important');
+      yearInput.style.setProperty('user-select', 'none', 'important');
+      yearInput.style.setProperty('-webkit-user-select', 'none', 'important');
+      yearInput.setAttribute('readonly', 'readonly');
+      yearInput.setAttribute('tabindex', '-1');
+      // Prevent keyboard input
+      yearInput.addEventListener('keydown', (e) => {
+        e.preventDefault();
+        return false;
+      });
+      yearInput.addEventListener('keypress', (e) => {
+        e.preventDefault();
+        return false;
+      });
+      yearInput.addEventListener('keyup', (e) => {
+        e.preventDefault();
+        return false;
+      });
       
       // Protect from translation
       yearInput.classList.add('notranslate');

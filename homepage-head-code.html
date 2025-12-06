@@ -153,9 +153,13 @@ input.cur-year {
   padding: 0 4px !important;
   text-align: center !important;
   -webkit-text-fill-color: #111 !important;
-  pointer-events: auto !important;
-  cursor: text !important;
+  pointer-events: none !important;
+  cursor: default !important;
   -moz-appearance: textfield !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
 }
 
 .flatpickr-current-month .numInputWrapper input.cur-year::-webkit-outer-spin-button,
