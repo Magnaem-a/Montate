@@ -192,7 +192,6 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: translations.start,
     allowInput: true,
     disableMobile: true, // CRITICAL: Forces custom picker on mobile to preserve placeholder
-    defaultDate: new Date(), // Ensure calendar shows current date/year
     onReady: function(selectedDates, dateStr, instance) {
       // Ensure placeholder stays visible after initialization
       const trans = getTranslatedPlaceholders();
@@ -215,6 +214,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Ensure year is visible when calendar opens
       setTimeout(() => ensureYearVisible(instance), 50);
       setTimeout(() => ensureYearVisible(instance), 200);
+      setTimeout(() => ensureYearVisible(instance), 500);
     },
     onChange: function (selectedDates, dateStr, instance) {
       // Restore placeholder when cleared
@@ -256,7 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: translations.end,
     allowInput: true,
     disableMobile: true, // CRITICAL: Forces custom picker on mobile to preserve placeholder
-    defaultDate: new Date(), // Ensure calendar shows current date/year
     onReady: function(selectedDates, dateStr, instance) {
       // Ensure placeholder stays visible after initialization
       const trans = getTranslatedPlaceholders();
@@ -279,6 +278,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Ensure year is visible when calendar opens
       setTimeout(() => ensureYearVisible(instance), 50);
       setTimeout(() => ensureYearVisible(instance), 200);
+      setTimeout(() => ensureYearVisible(instance), 500);
     },
     onChange: function (selectedDates, dateStr, instance) {
       // Restore placeholder when cleared
@@ -302,8 +302,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (endDateInstance) {
     protectFlatpickrFromTranslation(endDateInstance);
   }
-
-  // Function to ensure year input is visible and has value
+  
+  // Function to ensure year input is visible and functional
   function ensureYearVisible(instance) {
     if (!instance || !instance.calendarContainer) return;
     
@@ -321,32 +321,44 @@ document.addEventListener("DOMContentLoaded", function () {
         yearInput.dispatchEvent(new Event('change', { bubbles: true }));
       }
       
-      // Force visibility
+      // Force visibility and functionality
       yearInput.style.setProperty('display', 'inline-block', 'important');
       yearInput.style.setProperty('visibility', 'visible', 'important');
       yearInput.style.setProperty('opacity', '1', 'important');
       yearInput.style.setProperty('width', 'auto', 'important');
-      yearInput.style.setProperty('min-width', '60px', 'important');
+      yearInput.style.setProperty('min-width', '70px', 'important');
       yearInput.style.setProperty('color', '#111', 'important');
       yearInput.style.setProperty('-webkit-text-fill-color', '#111', 'important');
       yearInput.style.setProperty('background', 'transparent', 'important');
       yearInput.style.setProperty('border', 'none', 'important');
+      yearInput.style.setProperty('pointer-events', 'auto', 'important');
+      yearInput.style.setProperty('cursor', 'text', 'important');
+      yearInput.removeAttribute('disabled');
+      yearInput.removeAttribute('readonly');
       
       // Protect from translation
       yearInput.classList.add('notranslate');
       yearInput.setAttribute('translate', 'no');
       
-      // Ensure parent wrapper is visible
+      // Ensure parent wrapper is visible and functional
       const wrapper = yearInput.closest('.numInputWrapper');
       if (wrapper) {
         wrapper.style.setProperty('display', 'inline-block', 'important');
         wrapper.style.setProperty('visibility', 'visible', 'important');
+        wrapper.style.setProperty('opacity', '1', 'important');
         wrapper.classList.add('notranslate');
         wrapper.setAttribute('translate', 'no');
+        
+        // Ensure arrows are visible
+        const arrows = wrapper.querySelectorAll('.arrowUp, .arrowDown');
+        arrows.forEach(arrow => {
+          arrow.style.setProperty('display', 'block', 'important');
+          arrow.style.setProperty('visibility', 'visible', 'important');
+        });
       }
     });
   }
-
+  
   // Function to protect Flatpickr calendar elements from Google Translate
   function protectFlatpickrFromTranslation(instance) {
     if (!instance) return;
@@ -365,7 +377,6 @@ document.addEventListener("DOMContentLoaded", function () {
           // Also set on font tags that Google Translate adds
           if (el.tagName === 'FONT') {
             el.setAttribute('translate', 'no');
-            el.style.setProperty('display', '', 'important');
           }
         });
         

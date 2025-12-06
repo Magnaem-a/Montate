@@ -128,7 +128,6 @@ PURPOSE:
 
 .flatpickr-current-month .numInputWrapper input.cur-year,
 .flatpickr-current-month input.cur-year,
-.flatpickr-current-month .numInputWrapper .cur-year,
 .cur-year,
 .numInput.cur-year,
 input.cur-year {
@@ -147,6 +146,8 @@ input.cur-year {
   padding: 0 4px !important;
   text-align: center !important;
   -webkit-text-fill-color: #111 !important;
+  pointer-events: auto !important;
+  cursor: text !important;
   -moz-appearance: textfield !important;
 }
 
@@ -158,13 +159,25 @@ input.cur-year {
 
 .flatpickr-current-month .numInputWrapper input.cur-year:focus,
 .flatpickr-current-month input.cur-year:focus {
-  outline: none !important;
+  outline: 2px solid #C6FF00 !important;
+  outline-offset: 2px !important;
   border: none !important;
 }
 
 .flatpickr-current-month .numInputWrapper {
   display: inline-block !important;
   visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.flatpickr-current-month .numInputWrapper .arrowUp,
+.flatpickr-current-month .numInputWrapper .arrowDown {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .flatpickr-current-month .numInputWrapper * {
