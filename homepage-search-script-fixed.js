@@ -192,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: translations.start,
     allowInput: true,
     disableMobile: true, // CRITICAL: Forces custom picker on mobile to preserve placeholder
+    defaultDate: new Date(), // Ensure calendar shows current date/year
     onReady: function(selectedDates, dateStr, instance) {
       // Ensure placeholder stays visible after initialization
       const trans = getTranslatedPlaceholders();
@@ -207,6 +208,13 @@ document.addEventListener("DOMContentLoaded", function () {
           instance.input.placeholder = trans.start;
         }
       }, 100);
+      // Ensure year is visible
+      ensureYearVisible(instance);
+    },
+    onOpen: function(selectedDates, dateStr, instance) {
+      // Ensure year is visible when calendar opens
+      setTimeout(() => ensureYearVisible(instance), 50);
+      setTimeout(() => ensureYearVisible(instance), 200);
     },
     onChange: function (selectedDates, dateStr, instance) {
       // Restore placeholder when cleared
@@ -248,6 +256,7 @@ document.addEventListener("DOMContentLoaded", function () {
     placeholder: translations.end,
     allowInput: true,
     disableMobile: true, // CRITICAL: Forces custom picker on mobile to preserve placeholder
+    defaultDate: new Date(), // Ensure calendar shows current date/year
     onReady: function(selectedDates, dateStr, instance) {
       // Ensure placeholder stays visible after initialization
       const trans = getTranslatedPlaceholders();
@@ -263,6 +272,13 @@ document.addEventListener("DOMContentLoaded", function () {
           instance.input.placeholder = trans.end;
         }
       }, 100);
+      // Ensure year is visible
+      ensureYearVisible(instance);
+    },
+    onOpen: function(selectedDates, dateStr, instance) {
+      // Ensure year is visible when calendar opens
+      setTimeout(() => ensureYearVisible(instance), 50);
+      setTimeout(() => ensureYearVisible(instance), 200);
     },
     onChange: function (selectedDates, dateStr, instance) {
       // Restore placeholder when cleared

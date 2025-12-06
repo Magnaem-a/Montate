@@ -128,22 +128,32 @@ PURPOSE:
 
 .flatpickr-current-month .numInputWrapper input.cur-year,
 .flatpickr-current-month input.cur-year,
+.flatpickr-current-month .numInputWrapper .cur-year,
 .cur-year,
-.numInput.cur-year {
-  font-size: inherit !important;
-  font-weight: inherit !important;
+.numInput.cur-year,
+input.cur-year {
+  font-size: 18px !important;
+  font-weight: 600 !important;
   color: #111 !important;
-  font-family: inherit !important;
+  font-family: "Inter", sans-serif !important;
   display: inline-block !important;
   visibility: visible !important;
   opacity: 1 !important;
   width: auto !important;
-  min-width: 60px !important;
+  min-width: 70px !important;
+  max-width: 100px !important;
   background: transparent !important;
   border: none !important;
   padding: 0 4px !important;
   text-align: center !important;
   -webkit-text-fill-color: #111 !important;
+  -moz-appearance: textfield !important;
+}
+
+.flatpickr-current-month .numInputWrapper input.cur-year::-webkit-outer-spin-button,
+.flatpickr-current-month .numInputWrapper input.cur-year::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
 }
 
 .flatpickr-current-month .numInputWrapper input.cur-year:focus,
