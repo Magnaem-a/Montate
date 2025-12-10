@@ -108,35 +108,13 @@
 
   const languageMap = new Map([
 
-    ["af","Afrikaans"], ["sq","Albanian"], ["ar","Arabic"], ["hy","Armenian"],
+    ["en","English"],
 
-    ["az","Azerbaijani"], ["eu","Basque"], ["be","Belarusian"], ["bg","Bulgarian"],
+    ["fr","French"],
 
-    ["ca","Catalan"], ["zh-CN","ChineseSimplified"], ["zh-TW","ChineseTraditional"],
+    ["it","Italian"],
 
-    ["hr","Croatian"], ["cs","Czech"], ["da","Danish"], ["nl","Dutch"], ["de","German"],
-
-    ["en","English"], ["et","Estonian"], ["tl","Filipino"], ["fi","Finnish"],
-
-    ["fr","French"], ["gl","Galician"], ["ka","Georgian"], ["el","Greek"],
-
-    ["ht","Haitian"], ["iw","Hebrew"], ["hi","Hindi"], ["hu","Hungarian"],
-
-    ["is","Icelandic"], ["id","Indonesian"], ["ga","Irish"], ["it","Italian"],
-
-    ["ja","Japanese"], ["ko","Korean"], ["lv","Latvian"], ["lt","Lithuanian"],
-
-    ["mk","Macedonian"], ["ms","Malay"], ["mt","Maltese"], ["no","Norwegian"],
-
-    ["fa","Persian"], ["pl","Polish"], ["pt","Portuguese"], ["ro","Romanian"],
-
-    ["ru","Russian"], ["sr","Serbian"], ["sk","Slovak"], ["sl","Slovenian"],
-
-    ["es","Spanish"], ["sw","Swahili"], ["sv","Swedish"], ["th","Thai"],
-
-    ["tr","Turkish"], ["uk","Ukrainian"], ["ur","Urdu"], ["vi","Vietnamese"],
-
-    ["cy","Welsh"], ["yi","Yiddish"]
+    ["es","Spanish"]
 
   ]);
 
