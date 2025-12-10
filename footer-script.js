@@ -83,9 +83,13 @@ const restoreTranslationCase=()=>{
     }
   });
 };
-const customTranslations=new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]);
+const customLangTranslations={
+  es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
+  fr:new Map([['VTT','Quad']])
+};
 const applyCustomWordTranslations=lang=>{
-  if(customTranslations.size===0||lang!=='es') {
+  const customTranslations=customLangTranslations[lang];
+  if(!customTranslations||customTranslations.size===0) {
     document.querySelectorAll('span[data-custom-trans="true"]').forEach(span=>{
       const o=span.getAttribute('data-original');
       if(o){ const t=document.createTextNode(o); span.parentNode.replaceChild(t,span); }
@@ -109,11 +113,11 @@ const applyCustomWordTranslations=lang=>{
     if(!parent) return;
     let text=textNode.textContent;
     const replacements=[];
-    customTranslations.forEach((spanish,english)=>{
-      const regex=new RegExp(`\\b${english.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'gi');
+    customTranslations.forEach((toWord,fromWord)=>{
+      const regex=new RegExp(`\\b${fromWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'gi');
       let match;
       while((match=regex.exec(text))!==null){
-        replacements.push({index:match.index,length:match[0].length,english:match[0],spanish:preserveCase(match[0],spanish)});
+        replacements.push({index:match.index,length:match[0].length,from:match[0],to:preserveCase(match[0],toWord)});
       }
     });
     if(replacements.length>0){
@@ -127,7 +131,7 @@ const applyCustomWordTranslations=lang=>{
       replacements.sort((a,b)=>b.index-a.index);
       const fragment=document.createDocumentFragment();
       let lastIndex=text.length;
-      replacements.forEach(({index,length,english,spanish})=>{
+      replacements.forEach(({index,length,from,to})=>{
         if(index+length<lastIndex){
           const after=text.substring(index+length,lastIndex);
           if(after) fragment.insertBefore(document.createTextNode(after),fragment.firstChild);
@@ -136,9 +140,9 @@ const applyCustomWordTranslations=lang=>{
         span.className='notranslate';
         span.setAttribute('translate','no');
         span.setAttribute('data-custom-trans','true');
-        span.setAttribute('data-original',english);
+        span.setAttribute('data-original',from);
         span.style.display='inline';
-        span.textContent=spanish;
+        span.textContent=to;
         fragment.insertBefore(span,fragment.firstChild);
         lastIndex=index;
       });
