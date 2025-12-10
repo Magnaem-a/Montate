@@ -102,6 +102,8 @@
     ]),
     fr: new Map([
       ['VTT', 'Quad'],
+      ['Vtt', 'Quad'],
+      ['vtt', 'Quad'],
     ]),
   };
 

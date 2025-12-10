@@ -85,7 +85,7 @@ const restoreTranslationCase=()=>{
 };
 const customLangTranslations={
   es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
-  fr:new Map([['VTT','Quad']])
+  fr:new Map([['VTT','Quad'],['Vtt','Quad'],['vtt','Quad']])
 };
 const applyCustomWordTranslations=lang=>{
   const customTranslations=customLangTranslations[lang];
