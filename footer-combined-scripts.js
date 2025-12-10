@@ -494,8 +494,23 @@
       });
       c._msBound = true;
     });
-    new MutationObserver(protect).observe(document.body, {childList:true, subtree:true});
-    setInterval(protect, 1000);
+    let customTransTimeout=null;
+    const debouncedApplyCustomTrans=()=>{
+      if(customTransTimeout) clearTimeout(customTransTimeout);
+      customTransTimeout=setTimeout(()=>{
+        const lang=getCookie('googtrans')?.split('/').pop()||'en';
+        if(lang!=='en') applyCustomWordTranslations(lang);
+      },300);
+    };
+    new MutationObserver(()=>{
+      protect();
+      debouncedApplyCustomTrans();
+    }).observe(document.body, {childList:true, subtree:true, characterData:true});
+    setInterval(()=>{
+      protect();
+      const lang=getCookie('googtrans')?.split('/').pop()||'en';
+      if(lang!=='en') applyCustomWordTranslations(lang);
+    },2000);
 
     // Memberstack custom fields
     hideCustomFieldElements();

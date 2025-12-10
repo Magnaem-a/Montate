@@ -393,13 +393,27 @@
         if(lang!=='en') restoreTranslationCase();
       },500);
     };
-    new MutationObserver(debouncedCaseRestore).observe(document.body,{childList:true,subtree:false,characterData:false});
+    let customTransTimeout=null;
+    const debouncedApplyCustomTrans=()=>{
+      if(customTransTimeout) clearTimeout(customTransTimeout);
+      customTransTimeout=setTimeout(()=>{
+        const lang=getCookie('googtrans')?.split('/').pop()||'en';
+        if(lang!=='en') applyCustomWordTranslations(lang);
+      },300);
+    };
+    new MutationObserver(()=>{
+      debouncedCaseRestore();
+      debouncedApplyCustomTrans();
+    }).observe(document.body,{childList:true,subtree:true,characterData:true});
     setInterval(()=>{ 
       protect(); 
       const lang=getCookie('googtrans')?.split('/').pop()||'en';
-      if(lang!=='en') restoreTranslationCase(); 
+      if(lang!=='en') {
+        restoreTranslationCase();
+        applyCustomWordTranslations(lang);
+      }
       if(window.updateDatePlaceholders) window.updateDatePlaceholders(); 
-    },3000);
+    },2000);
   };
   if(document.readyState==='complete'||document.readyState==='interactive') init();
   else document.addEventListener('DOMContentLoaded',init);
