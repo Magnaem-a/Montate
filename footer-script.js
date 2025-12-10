@@ -1,4 +1,4 @@
-<!-- 💙 MEMBERSCRIPT #153 v2.0 💙 - FREE MULTILINGUAL SITE WITH GOOGLE TRANSLATE -->
+<!-- 💙 MEMBERSCRIPT #153 (EN/IT/ES/FR) + #10 (Hide Elements) + Select Styling -->
 
 <script>
 
