@@ -96,7 +96,10 @@ const reverseTranslationMap=new Map([
   ['Pasola','Scooter'],['Pasolas','Scooters'],
   ['Nombre','First name']
 ]);
+let isApplyingCustomTrans=false;
 const applyCustomWordTranslations=lang=>{
+  if(isApplyingCustomTrans) return;
+  isApplyingCustomTrans=true;
   const customTranslations=customLangTranslations[lang];
   if(!customTranslations||customTranslations.size===0) {
     document.querySelectorAll('span[data-custom-trans="true"]').forEach(span=>{
@@ -110,6 +113,7 @@ const applyCustomWordTranslations=lang=>{
     document.querySelectorAll('[data-custom-trans-applied]').forEach(el=>{
       if(!el.querySelector('span[data-custom-trans="true"]')) el.removeAttribute('data-custom-trans-applied');
     });
+    isApplyingCustomTrans=false;
     return;
   }
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
@@ -187,6 +191,7 @@ const applyCustomWordTranslations=lang=>{
       }
     }
   });
+  isApplyingCustomTrans=false;
 };
 const protect=()=>{
   document.querySelectorAll('.flatpickr-calendar, .flatpickr-weekday, .flatpickr-day, .flatpickr-month, .flatpickr-current-month, .numInputWrapper, .cur-year, .flatpickr-current-month input, .flatpickr-current-month .numInputWrapper input').forEach(el=>{
@@ -454,31 +459,41 @@ const init=()=>{
     c._msBound=true;
   });
   let customTransTimeout=null;
+  let lastProcessedTime=0;
   const debouncedApplyCustomTrans=()=>{
     if(customTransTimeout) clearTimeout(customTransTimeout);
+    const now=Date.now();
+    if(now-lastProcessedTime<1000) return;
     customTransTimeout=setTimeout(()=>{
       const lang=getCookie('googtrans')?.split('/').pop()||'en';
-      if(lang!=='en') applyCustomWordTranslations(lang);
-    },300);
+      if(lang!=='en'&&!isApplyingCustomTrans) {
+        lastProcessedTime=Date.now();
+        applyCustomWordTranslations(lang);
+      }
+    },500);
   };
-  new MutationObserver(()=>{
+  let mutationCount=0;
+  new MutationObserver((mutations)=>{
+    mutationCount++;
+    if(mutationCount>50) return;
     protect();
     const lang=getCookie('googtrans')?.split('/').pop()||'en';
-    if(lang!=='en') {
+    if(lang!=='en'&&!isApplyingCustomTrans) {
       restoreTranslationCase();
       debouncedApplyCustomTrans();
     }
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
-  }).observe(document.body,{childList:true,subtree:true,characterData:true});
+  }).observe(document.body,{childList:true,subtree:false,characterData:false});
   setInterval(()=>{
+    mutationCount=0;
     protect();
     const lang=getCookie('googtrans')?.split('/').pop()||'en';
-    if(lang!=='en') {
+    if(lang!=='en'&&!isApplyingCustomTrans) {
       restoreTranslationCase();
       applyCustomWordTranslations(lang);
     }
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
-  },2000);
+  },5000);
   
   // Memberstack custom fields (#10)
   hideCustomFieldElements();
