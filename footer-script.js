@@ -1,3 +1,5 @@
+<!-- 💙 MEMBERSCRIPT #153 (EN/IT/ES/FR) + #10 (Hide Elements) + Select Styling -->
+<script>
 (function(){
   const initScript=()=>{
     if(!document.head||!document.body) return;
@@ -450,29 +452,39 @@ const init=()=>{
     }
     if(window.updateDatePlaceholders) window.updateDatePlaceholders();
   },2000);
+  
+  // Memberstack custom fields (#10)
+  hideCustomFieldElements();
 };
+
+// ==========================================================
+// MEMBERSCRIPT #10 - HIDE ELEMENTS IF CUSTOM FIELD IS BLANK
+// ==========================================================
+
+function hideCustomFieldElements() {
+  let msMem = {};
+  try {
+    msMem = JSON.parse(localStorage.getItem('_ms-mem')) || {};
+  } catch(e) {
+    msMem = {};
+  }
+  const customFields = msMem.customFields || {};
+  const elements = document.querySelectorAll('[ms-code-customfield]');
+  elements.forEach(element => {
+    const attr = element.getAttribute('ms-code-customfield');
+    if (!attr) return;
+    if (attr.startsWith('!')) {
+      const key = attr.slice(1);
+      if (customFields[key]) element.remove();
+    } else {
+      if (!customFields[attr]) element.remove();
+    }
+  });
+}
+
 if(document.readyState==='complete'||document.readyState==='interactive') init();
 else document.addEventListener('DOMContentLoaded',init);
 document.addEventListener('DOMContentLoaded',function(){
-  let msMem={};
-  try{
-    msMem=JSON.parse(localStorage.getItem('_ms-mem'))||{};
-  }catch(e){
-    msMem={};
-  }
-  const customFields=msMem.customFields||{};
-  document.querySelectorAll('[ms-code-customfield]').forEach(element=>{
-    const attr=element.getAttribute('ms-code-customfield');
-    if(!attr) return;
-    if(attr.startsWith('!')){
-      const key=attr.slice(1);
-      if(customFields[key]){
-        element.remove();
-      }
-    }else{
-      if(!customFields[attr]){
-        element.remove();
-      }
-    }
-  });
+  hideCustomFieldElements();
 });
+</script>
