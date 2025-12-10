@@ -101,7 +101,11 @@ const applyCustomWordTranslations=lang=>{
   if(!customTranslations||customTranslations.size===0) {
     document.querySelectorAll('span[data-custom-trans="true"]').forEach(span=>{
       const origEnglish=span.getAttribute('data-orig-english');
-      if(origEnglish){ const t=document.createTextNode(origEnglish); span.parentNode.replaceChild(t,span); }
+      if(origEnglish){
+        const t=document.createTextNode(origEnglish);
+        const parent=span.parentNode;
+        if(parent) parent.replaceChild(t,span);
+      }
     });
     document.querySelectorAll('[data-custom-trans-applied]').forEach(el=>{
       if(!el.querySelector('span[data-custom-trans="true"]')) el.removeAttribute('data-custom-trans-applied');
@@ -111,8 +115,10 @@ const applyCustomWordTranslations=lang=>{
   const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{
     acceptNode:n=>{
       const p=n.parentElement;
-      if(!p||p.closest('.notranslate')||p.closest('script')||p.closest('style')||p.closest('noscript')||!n.textContent.trim()||p.hasAttribute('data-custom-trans-applied')) return NodeFilter.FILTER_REJECT;
+      if(!p||!n.textContent.trim()) return NodeFilter.FILTER_REJECT;
+      if(p.closest('.notranslate')||p.closest('script')||p.closest('style')||p.closest('noscript')) return NodeFilter.FILTER_REJECT;
       if(p.closest('span[data-custom-trans="true"]')) return NodeFilter.FILTER_REJECT;
+      if(p.hasAttribute('data-custom-trans-applied')&&p.querySelector('span[data-custom-trans="true"]')) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     }
   });
@@ -121,16 +127,25 @@ const applyCustomWordTranslations=lang=>{
   textNodes.forEach(textNode=>{
     const parent=textNode.parentElement;
     if(!parent) return;
-    const origText=parent.getAttribute('data-ms-orig-case')||textNode.textContent;
+    const origText=parent.getAttribute('data-ms-orig-case')||'';
     let text=textNode.textContent;
     const replacements=[];
     customTranslations.forEach((toWord,fromWord)=>{
       const escaped=fromWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
       const regex=new RegExp(escaped.includes(' ')?escaped:`\\b${escaped}\\b`,'gi');
       let match;
+      const origLower=origText.toLowerCase();
       while((match=regex.exec(text))!==null){
-        const found=origText.toLowerCase().includes(fromWord.toLowerCase())?fromWord:(reverseTranslationMap.get(match[0])||match[0]);
-        replacements.push({index:match.index,length:match[0].length,from:match[0],to:preserveCase(match[0],toWord),origEnglish:found});
+        let origEnglish=fromWord;
+        if(origLower.includes(fromWord.toLowerCase())){
+          origEnglish=fromWord;
+        }else{
+          const rev=reverseTranslationMap.get(match[0]);
+          if(rev) origEnglish=rev;
+          else if(origLower.includes('atv')) origEnglish='ATV';
+          else origEnglish=fromWord;
+        }
+        replacements.push({index:match.index,length:match[0].length,from:match[0],to:preserveCase(match[0],toWord),origEnglish});
       }
     });
     if(replacements.length>0){
