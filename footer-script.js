@@ -89,11 +89,18 @@ const customLangTranslations={
   es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
   fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads'],['VTT','Quad'],['Vtt','Quad'],['vtt','Quad'],['VTTs','Quads'],['Vtts','Quads']])
 };
+const reverseTranslationMap=new Map([
+  ['VTT','ATV'],['Vtt','ATV'],['vtt','ATV'],['VTTs','ATVs'],['Vtts','ATVs'],
+  ['Fourwheel','ATV'],['fourwheel','ATV'],['Fourwheels','ATVs'],['fourwheels','ATVs'],
+  ['Pasola','Scooter'],['Pasolas','Scooters'],
+  ['Nombre','First name']
+]);
 const applyCustomWordTranslations=lang=>{
   const customTranslations=customLangTranslations[lang];
   if(!customTranslations||customTranslations.size===0) {
     document.querySelectorAll('span[data-custom-trans="true"]').forEach(span=>{
-      const o=span.getAttribute('data-original');
+      const origEnglish=span.getAttribute('data-orig-english');
+      const o=origEnglish||span.getAttribute('data-original');
       if(o){ const t=document.createTextNode(o); span.parentNode.replaceChild(t,span); }
     });
     document.querySelectorAll('[data-custom-trans-applied]').forEach(el=>{
@@ -105,6 +112,7 @@ const applyCustomWordTranslations=lang=>{
     acceptNode:n=>{
       const p=n.parentElement;
       if(!p||p.closest('.notranslate')||p.closest('script')||p.closest('style')||p.closest('noscript')||!n.textContent.trim()||p.hasAttribute('data-custom-trans-applied')) return NodeFilter.FILTER_REJECT;
+      if(p.closest('span[data-custom-trans="true"]')) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     }
   });
@@ -143,6 +151,8 @@ const applyCustomWordTranslations=lang=>{
         span.setAttribute('translate','no');
         span.setAttribute('data-custom-trans','true');
         span.setAttribute('data-original',from);
+        const origEnglish=reverseTranslationMap.get(from)||from;
+        span.setAttribute('data-orig-english',origEnglish);
         span.style.display='inline';
         span.textContent=to;
         fragment.insertBefore(span,fragment.firstChild);

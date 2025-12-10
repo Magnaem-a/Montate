@@ -115,12 +115,20 @@
     ]),
   };
 
+  const reverseTranslationMap = new Map([
+    ['VTT', 'ATV'], ['Vtt', 'ATV'], ['vtt', 'ATV'], ['VTTs', 'ATVs'], ['Vtts', 'ATVs'],
+    ['Fourwheel', 'ATV'], ['fourwheel', 'ATV'], ['Fourwheels', 'ATVs'], ['fourwheels', 'ATVs'],
+    ['Pasola', 'Scooter'], ['Pasolas', 'Scooters'],
+    ['Nombre', 'First name']
+  ]);
+
   // Apply/restore custom translations based on language
   const applyCustomWordTranslations = lang => {
     const customTranslations = customLangTranslations[lang];
     if (!customTranslations || customTranslations.size === 0) {
       document.querySelectorAll('span[data-custom-trans="true"]').forEach(span => {
-        const original = span.getAttribute('data-original');
+        const origEnglish = span.getAttribute('data-orig-english');
+        const original = origEnglish || span.getAttribute('data-original');
         if (original) {
           const textNode = document.createTextNode(original);
           span.parentNode.replaceChild(textNode, span);
@@ -138,6 +146,7 @@
           if (!parent || parent.closest('.notranslate') || parent.closest('script') || parent.closest('style') || parent.closest('noscript')) return NodeFilter.FILTER_REJECT;
           if (node.textContent.trim().length === 0) return NodeFilter.FILTER_REJECT;
           if (parent.hasAttribute('data-custom-trans-applied')) return NodeFilter.FILTER_REJECT;
+          if (parent.closest('span[data-custom-trans="true"]')) return NodeFilter.FILTER_REJECT;
           return NodeFilter.FILTER_ACCEPT;
         }
       });
@@ -179,6 +188,8 @@
             span.setAttribute('translate', 'no');
             span.setAttribute('data-custom-trans', 'true');
             span.setAttribute('data-original', from);
+            const origEnglish = reverseTranslationMap.get(from) || from;
+            span.setAttribute('data-orig-english', origEnglish);
             span.style.display = 'inline';
             span.textContent = to;
             fragment.insertBefore(span, fragment.firstChild);
