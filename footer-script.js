@@ -87,10 +87,11 @@ const restoreTranslationCase=()=>{
 };
 const customLangTranslations={
   es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
-  fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads'],['VTT','Quad'],['Vtt','Quad'],['vtt','Quad'],['VTTs','Quads'],['Vtts','Quads']])
+  fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads'],['VTT','Quad'],['Vtt','Quad'],['vtt','Quad'],['VTTs','Quads'],['Vtts','Quads'],['des quads','Quads'],['des VTT','Quads'],['Équipes de quatre','Quads'],['équipes de quatre','Quads']])
 };
 const reverseTranslationMap=new Map([
   ['VTT','ATV'],['Vtt','ATV'],['vtt','ATV'],['VTTs','ATVs'],['Vtts','ATVs'],
+  ['des quads','ATVs'],['des VTT','ATVs'],['Équipes de quatre','ATVs'],['équipes de quatre','ATVs'],
   ['Fourwheel','ATV'],['fourwheel','ATV'],['Fourwheels','ATVs'],['fourwheels','ATVs'],
   ['Pasola','Scooter'],['Pasolas','Scooters'],
   ['Nombre','First name']
@@ -100,8 +101,7 @@ const applyCustomWordTranslations=lang=>{
   if(!customTranslations||customTranslations.size===0) {
     document.querySelectorAll('span[data-custom-trans="true"]').forEach(span=>{
       const origEnglish=span.getAttribute('data-orig-english');
-      const o=origEnglish||span.getAttribute('data-original');
-      if(o){ const t=document.createTextNode(o); span.parentNode.replaceChild(t,span); }
+      if(origEnglish){ const t=document.createTextNode(origEnglish); span.parentNode.replaceChild(t,span); }
     });
     document.querySelectorAll('[data-custom-trans-applied]').forEach(el=>{
       if(!el.querySelector('span[data-custom-trans="true"]')) el.removeAttribute('data-custom-trans-applied');
@@ -121,13 +121,16 @@ const applyCustomWordTranslations=lang=>{
   textNodes.forEach(textNode=>{
     const parent=textNode.parentElement;
     if(!parent) return;
+    const origText=parent.getAttribute('data-ms-orig-case')||textNode.textContent;
     let text=textNode.textContent;
     const replacements=[];
     customTranslations.forEach((toWord,fromWord)=>{
-      const regex=new RegExp(`\\b${fromWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'gi');
+      const escaped=fromWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      const regex=new RegExp(escaped.includes(' ')?escaped:`\\b${escaped}\\b`,'gi');
       let match;
       while((match=regex.exec(text))!==null){
-        replacements.push({index:match.index,length:match[0].length,from:match[0],to:preserveCase(match[0],toWord)});
+        const found=origText.toLowerCase().includes(fromWord.toLowerCase())?fromWord:(reverseTranslationMap.get(match[0])||match[0]);
+        replacements.push({index:match.index,length:match[0].length,from:match[0],to:preserveCase(match[0],toWord),origEnglish:found});
       }
     });
     if(replacements.length>0){
@@ -141,7 +144,7 @@ const applyCustomWordTranslations=lang=>{
       replacements.sort((a,b)=>b.index-a.index);
       const fragment=document.createDocumentFragment();
       let lastIndex=text.length;
-      replacements.forEach(({index,length,from,to})=>{
+      replacements.forEach(({index,length,from,to,origEnglish})=>{
         if(index+length<lastIndex){
           const after=text.substring(index+length,lastIndex);
           if(after) fragment.insertBefore(document.createTextNode(after),fragment.firstChild);
@@ -150,8 +153,6 @@ const applyCustomWordTranslations=lang=>{
         span.className='notranslate';
         span.setAttribute('translate','no');
         span.setAttribute('data-custom-trans','true');
-        span.setAttribute('data-original',from);
-        const origEnglish=reverseTranslationMap.get(from)||from;
         span.setAttribute('data-orig-english',origEnglish);
         span.style.display='inline';
         span.textContent=to;
