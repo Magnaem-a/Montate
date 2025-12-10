@@ -107,6 +107,11 @@
       ['atvs', 'Quads'],
       ['ATV\'s', 'Quads'],
       ['atv\'s', 'Quads'],
+      ['VTT', 'Quad'],
+      ['Vtt', 'Quad'],
+      ['vtt', 'Quad'],
+      ['VTTs', 'Quads'],
+      ['Vtts', 'Quads'],
     ]),
   };
 
@@ -329,7 +334,7 @@
       }
     }
     const applyWithRetry = (attempt = 0) => {
-      if (attempt > 5) {
+      if (attempt > 8) {
         const currentLang = getCookie('googtrans')?.split('/').pop() || 'en';
         if (currentLang !== target) {
           console.log('Translation not applied, forcing page reload');
@@ -344,16 +349,21 @@
         const comboValue = combo ? combo.value : '';
         const expectedValue = target === 'en' ? '' : target;
         const isCorrect = (currentLang === target) || (comboValue === expectedValue);
-        if (!isCorrect && attempt < 5) {
+        if (!isCorrect && attempt < 8) {
           if (combo) {
             combo.value = target === 'en' ? '' : target;
             triggerTranslation();
           }
           applyWithRetry(attempt + 1);
+        } else if (currentLang === target) {
+          applyCustomWordTranslations(target);
         }
-      }, 150 * (attempt + 1));
+      }, 200 * (attempt + 1));
     };
-    setTimeout(() => applyWithRetry(), 100);
+    setTimeout(() => applyWithRetry(), 200);
+    setTimeout(() => applyWithRetry(0), 500);
+    setTimeout(() => applyWithRetry(0), 1000);
+    setTimeout(() => applyWithRetry(0), 2000);
   }
 
   // Enhanced click handler with immediate feedback

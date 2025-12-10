@@ -79,7 +79,7 @@
   };
   const customLangTranslations={
     es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
-    fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads']])
+    fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads'],['VTT','Quad'],['Vtt','Quad'],['vtt','Quad'],['VTTs','Quads'],['Vtts','Quads']])
   };
 
   const applyCustomWordTranslations=lang=>{
@@ -283,7 +283,7 @@
     let retryTimeout=null;
     const applyWithRetry=(attempt=0)=>{
       if(retryTimeout) clearTimeout(retryTimeout);
-      if(attempt>3){
+      if(attempt>8){
         const currentLang=getCookie('googtrans')?.split('/').pop()||'en';
         if(currentLang!==target){ 
           if(target==='en'){ restoreEnglish(); }else{ console.log('Translation not applied'); }
@@ -305,13 +305,18 @@
         const currentLang=getCookie('googtrans')?.split('/').pop()||'en';
         const comboValue=combo?.value||'';
         const expectedValue=target==='en'?'':target;
-        if((currentLang!==target&&comboValue!==expectedValue)&&attempt<3){
+        if((currentLang!==target&&comboValue!==expectedValue)&&attempt<8){
           if(combo){ combo.value=target==='en'?'':target; if(target==='en') restoreEnglish(); trigger(); }
           applyWithRetry(attempt+1);
+        }else if(currentLang===target){
+          applyCustomWordTranslations(target);
         }
-      },300*(attempt+1));
+      },200*(attempt+1));
     };
     setTimeout(()=>applyWithRetry(),200);
+    setTimeout(()=>applyWithRetry(0),500);
+    setTimeout(()=>applyWithRetry(0),1000);
+    setTimeout(()=>applyWithRetry(0),2000);
   }
   function setupLangButtons(){
     document.querySelectorAll('[data-ms-code-lang-select]:not([data-lang-handler-bound])').forEach(el=>{

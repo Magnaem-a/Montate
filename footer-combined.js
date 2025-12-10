@@ -77,7 +77,7 @@
   };
   const customLangTranslations={
     es:new Map([['Scooter','Pasola'],['Scooters','Pasolas'],['First name','Nombre'],['Buggy','Buggy'],['ATV','Fourwheel'],['Make','Marca']]),
-    fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads']])
+    fr:new Map([['ATV','Quad'],['ATVs','Quads'],['atv','Quad'],['atvs','Quads'],['ATV\'s','Quads'],['atv\'s','Quads'],['VTT','Quad'],['Vtt','Quad'],['vtt','Quad'],['VTTs','Quads'],['Vtts','Quads']])
   };
   const applyCustomWordTranslations=lang=>{
     const customTranslations=customLangTranslations[lang];
@@ -290,7 +290,7 @@
     let retryTimeout=null;
     const applyWithRetry=(attempt=0)=>{
       if(retryTimeout) clearTimeout(retryTimeout);
-      if(attempt>2){
+      if(attempt>8){
         return;
       }
       protect(); 
@@ -308,17 +308,22 @@
               const s=window.google?.translate?.TranslateService?.getInstance();
               if(s?.restore) s.restore();
             },50);
-            if(attempt<2) applyWithRetry(attempt+1);
+            if(attempt<8) applyWithRetry(attempt+1);
           }
         }else{
           if(currentLang!==target&&comboValue!==target){
             combo.value=target; trigger();
-            if(attempt<2) applyWithRetry(attempt+1);
+            if(attempt<8) applyWithRetry(attempt+1);
+          }else if(currentLang===target){
+            applyCustomWordTranslations(target);
           }
         }
       },200*(attempt+1));
     };
-    setTimeout(()=>applyWithRetry(),100);
+    setTimeout(()=>applyWithRetry(),200);
+    setTimeout(()=>applyWithRetry(0),500);
+    setTimeout(()=>applyWithRetry(0),1000);
+    setTimeout(()=>applyWithRetry(0),2000);
   }
   function setupLangButtons(){
     document.querySelectorAll('[data-ms-code-lang-select]:not([data-lang-handler-bound])').forEach(el=>{
