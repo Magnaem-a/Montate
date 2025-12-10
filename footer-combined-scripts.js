@@ -101,9 +101,8 @@
       ['Make', 'Marca'],
     ]),
     fr: new Map([
-      ['VTT', 'Quad'],
-      ['Vtt', 'Quad'],
-      ['vtt', 'Quad'],
+      ['ATV', 'Quad'],
+      ['ATVs', 'Quads'],
     ]),
   };
 
