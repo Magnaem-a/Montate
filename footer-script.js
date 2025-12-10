@@ -129,6 +129,7 @@ const applyCustomWordTranslations=lang=>{
     if(!parent) return;
     const origText=parent.getAttribute('data-ms-orig-case')||'';
     let text=textNode.textContent;
+    if(text.includes('Quad')&&!text.includes('ATV')&&!text.includes('VTT')) return;
     const replacements=[];
     customTranslations.forEach((toWord,fromWord)=>{
       const escaped=fromWord.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
