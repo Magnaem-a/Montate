@@ -103,6 +103,10 @@
     fr: new Map([
       ['ATV', 'Quad'],
       ['ATVs', 'Quads'],
+      ['atv', 'Quad'],
+      ['atvs', 'Quads'],
+      ['ATV\'s', 'Quads'],
+      ['atv\'s', 'Quads'],
     ]),
   };
 
