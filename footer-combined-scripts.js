@@ -1,4 +1,4 @@
-<!-- 💙 COMBINED FOOTER SCRIPTS: Google Translate (#153) + Memberstack Custom Fields (#10) + Register Business Fields + Select Styling 💙 -->
+<!-- 💙 COMBINED FOOTER SCRIPTS: Google Translate (#153) + Memberstack Custom Fields (#10) + Select Styling 💙 -->
 
 <style>
 /* Select input styling */
@@ -421,68 +421,6 @@
   }
 
   // ==========================================================
-  // REGISTER BUSINESS SIGN UP FIELDS SCRIPT
-  // ==========================================================
-  
-  const FIELD_1_SELECTOR = '#rnc';
-  const FIELD_2_SELECTOR = '#business-name';
-  const STORAGE_KEY = 'montate_register_business_clicked';
-
-  function showField(fieldElement) {
-    if (!fieldElement) return;
-    const wrapper = fieldElement.closest('.form_field-wrapper');
-    if (wrapper) {
-      wrapper.classList.remove('hidden');
-      if (wrapper.style.display === 'none') wrapper.style.display = '';
-      wrapper.style.opacity = '1';
-      wrapper.style.maxHeight = 'none';
-      wrapper.style.overflow = 'visible';
-      wrapper.style.margin = '';
-      wrapper.style.padding = '';
-      wrapper.style.pointerEvents = 'auto';
-    } else {
-      fieldElement.classList.remove('hidden');
-      if (fieldElement.style.display === 'none') fieldElement.style.display = '';
-    }
-  }
-
-  function isSignUpPage() {
-    const path = window.location.pathname.toLowerCase();
-    const href = window.location.href.toLowerCase();
-    return path.includes('/sign-up') || path.includes('/signup') || path.includes('/register') ||
-           path.includes('/sign-up/') || href.includes('sign-up') || href.includes('signup') ||
-           document.querySelector('form[data-wf-form-id]') !== null;
-  }
-
-  function setupRegisterBusinessButton() {
-    document.addEventListener('click', function(e) {
-      const button = e.target.closest('#register-business');
-      if (button) {
-        sessionStorage.setItem(STORAGE_KEY, 'true');
-        button.style.opacity = '0.7';
-        setTimeout(() => { button.style.opacity = ''; }, 200);
-      }
-    });
-    const existingButton = document.getElementById('register-business');
-    if (existingButton && !existingButton.hasAttribute('data-register-handler-bound')) {
-      existingButton.setAttribute('data-register-handler-bound', 'true');
-      existingButton.addEventListener('click', function() {
-        sessionStorage.setItem(STORAGE_KEY, 'true');
-      });
-    }
-  }
-
-  function showBusinessFields() {
-    const flag = sessionStorage.getItem(STORAGE_KEY);
-    if (flag === 'true') {
-      const field1 = document.querySelector(FIELD_1_SELECTOR);
-      if (field1) showField(field1);
-      const field2 = document.querySelector(FIELD_2_SELECTOR);
-      if (field2) showField(field2);
-    }
-  }
-
-  // ==========================================================
   // INITIALIZATION
   // ==========================================================
   
@@ -527,21 +465,6 @@
 
     // Memberstack custom fields
     hideCustomFieldElements();
-
-    // Register business fields
-    setupRegisterBusinessButton();
-    if (isSignUpPage()) {
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', showBusinessFields);
-      } else {
-        showBusinessFields();
-        setTimeout(showBusinessFields, 500);
-        setTimeout(showBusinessFields, 1000);
-      }
-      const observer = new MutationObserver(() => showBusinessFields());
-      observer.observe(document.body, {childList:true, subtree:true});
-      setTimeout(() => observer.disconnect(), 5000);
-    }
   }
 
   // Run initialization
