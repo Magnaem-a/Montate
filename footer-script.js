@@ -1,11 +1,11 @@
-<!-- 💙 MEMBERSCRIPT #153 (EN/IT/ES/FR) + #10 (Hide Elements) + Select Styling -->
+<!-- 💙 MEMBERSCRIPT #153 (EN/IT/ES/FR) -->
 <script>
   // 1) Load Google Translate
   const gtScript = document.createElement('script');
   gtScript.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
   document.head.appendChild(gtScript);
 
-  // 2) Hide Google UI + Select Styling
+  // 2) Hide Google UI
   const style = document.createElement('style');
   style.innerHTML = `
     body { top: 0px !important; position: static !important; }
@@ -16,23 +16,6 @@
       background: none !important;
       box-shadow: none !important;
     }
-    /* Select input styling */
-    .form_input.is-select-input {
-      position: relative;
-      width: 100%;
-      padding: 1rem 2.5rem 1rem 1rem !important;
-      appearance: none !important;
-      -webkit-appearance: none !important;
-      -moz-appearance: none !important;
-      background-color: #fff;
-      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23000000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 16px;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-    .form_input.is-select-input::-ms-expand { display: none; }
   `;
   document.head.appendChild(style);
 
@@ -372,33 +355,11 @@
     });
   }
 
-  // 14) Memberstack custom fields (#10)
-  function hideCustomFieldElements() {
-    let msMem = {};
-    try {
-      msMem = JSON.parse(localStorage.getItem('_ms-mem')) || {};
-    } catch(e) {
-      msMem = {};
-    }
-    const customFields = msMem.customFields || {};
-    const elements = document.querySelectorAll('[ms-code-customfield]');
-    elements.forEach(element => {
-      const attr = element.getAttribute('ms-code-customfield');
-      if (attr && attr.startsWith('!')) {
-        const key = attr.substring(1);
-        if (customFields[key]) element.remove();
-      } else {
-        if (!customFields[attr]) element.remove();
-      }
-    });
-  }
-
-  // 15) Wire up
+  // 14) Wire up
   document.addEventListener("DOMContentLoaded", function () {
     updateLanguageBadge(currentLang);
     updateLanguageSpecificContent(currentLang);
     protect();
-    hideCustomFieldElements();
     document.querySelectorAll('[data-ms-code-lang-select]').forEach(el => {
       el.addEventListener('click', function (e) {
         e.preventDefault();
